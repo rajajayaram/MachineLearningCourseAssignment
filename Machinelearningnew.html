@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>1.Overview</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h3>1.Overview</h3>
+
+<p>This analysis is the final report of the Peer Assessment project from Coursera&#39;s course Practical Machine Learning, as part of the Specialization in Data Science. </p>
+
+<p>This analysis meant to be the basis for the course quiz and a prediction assignment writeup. </p>
+
+<p>The main goal of the project is to predict the manner in which 6 participants performed some exercise as described below. </p>
+
+<p>There is the &quot;classe&quot; variable in the training set. </p>
+
+<p>The machine learning algorithm described here is applied to the 20 test cases available in the test data and the predictions are submitted in appropriate format to the Course Project Prediction Quiz for automated grading</p>
+
+<h3>2.Background Details</h3>
+
+<p>Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a> (see the section on the Weight Lifting Exercise Dataset).</p>
+
+<p>Read more: <a href="http://groupware.les.inf.puc-rio.br/har#ixzz3xsbS5bVX">http://groupware.les.inf.puc-rio.br/har#ixzz3xsbS5bVX</a></p>
+
+<h3>3.Data Loading and Exploratory Analysis</h3>
+
+<h3>3.1 Overview of the Dataset</h3>
+
+<p>The training data for this project are available here:</p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</a></p>
+
+<p>The test data are available here:</p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
+
+<p>The data for this project come from <a href="http://groupware.les.inf.puc-rio.br/har">http://groupware.les.inf.puc-rio.br/har</a>. </p>
+
+<p>A short description of the datasets content from the authors&#39; website:</p>
+
+<p>&quot;Six young health participants were asked to perform one set of 10 repetitions of the Unilateral Dumbbell Biceps Curl in five different fashions: exactly according to the specification (Class A), throwing the elbows to the front (Class B), lifting the dumbbell only halfway (Class C), lowering the dumbbell only halfway (Class D) and throwing the hips to the front (Class E).</p>
+
+<p>Class A corresponds to the specified execution of the exercise, while the other 4 classes correspond to common mistakes. 
+Participants were supervised by an experienced weight lifter to make sure the execution complied to the manner they were supposed to simulate. 
+The exercises were performed by six male participants aged between 20-28 years, with little weight lifting experience. 
+We made sure that all participants could easily simulate the mistakes in a safe and controlled manner by using a relatively light dumbbell (1.25kg).&quot;</p>
+
+<h3>3.2 Setting up the environment for the analysis</h3>
+
+<pre><code class="r">library(kernlab)
+library(caret)
+library(randomForest)
+library(ggthemes)
+library(gridExtra)
+library(ggplot2)
+library(grid)
+library(e1071)
+</code></pre>
+
+<h3>3.3 Load the data</h3>
+
+<p>The links for the training and test data are given below:</p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</a></p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv">https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</a></p>
+
+<p>First of all we fetch them and then load them:</p>
+
+<pre><code class="r">trainUrl &lt;-&quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv&quot;
+testUrl &lt;- &quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv&quot;
+trainFile &lt;- &quot;./data/training.csv&quot;
+testFile  &lt;- &quot;./data/testing.csv&quot;
+
+if (!file.exists(&quot;./data&quot;)) {
+  dir.create(&quot;./data&quot;)
+}
+
+if (!file.exists(trainFile)) {
+    download.file(trainUrl, destfile = trainFile)
+}
+if (!file.exists(testFile)) {
+    download.file(testUrl, destfile = testFile)
+}
+
+train &lt;- read.csv(trainFile, na.strings=c(&quot;NA&quot;, &quot;&quot;, &quot;#DIV/0!&quot;), stringsAsFactors=FALSE)
+test &lt;- read.csv(testFile, na.strings=c(&quot;NA&quot;, &quot;&quot;, &quot;#DIV/0!&quot;), stringsAsFactors=FALSE)
+train_used = train[,c(8:11,37:49,60:68,84:86,102,113:124,140,151:160)]
+</code></pre>
+
+<h3>3.3.1 About the data set</h3>
+
+<p>The raw dataset contained 19622 rows of data, with 160160 variables. </p>
+
+<p>Many variables contained largely missing data (usually with only one row of data), so these were removed from the dataset. </p>
+
+<p>In addition, variables not concerning the movement sensors were also removed. </p>
+
+<p>This resulted in a dataset of 5353 variables.</p>
+
+<h3>3.3.3 Quality of the data set</h3>
+
+<p>Let us comment on the quality of the data in the below depicted graph</p>
+
+<pre><code class="r">gg1 = ggplot(data=train,aes(seq_along(roll_belt),roll_belt)) + geom_point(aes(colour=train$classe)) + labs(colour=&quot;Classe&quot;,title=&quot;Roll-Belt Measurement forall Participants&quot;,y=&quot;Roll Belt Measurement&quot;,x=&quot;Index&quot;)
+
+gg2 = ggplot(data=train[train$user_name==&quot;carlitos&quot;,],aes(seq_along(roll_belt),roll_belt)) + geom_point(aes(colour=train[train$user_name==&quot;carlitos&quot;,]$classe)) + labs(colour=&quot;Classe&quot;,title=&quot;Roll Belt Measurement for Carlitos&quot;,y=&quot;Roll Belt Measurement&quot;,x=&quot;Index&quot;)
+
+gg3 = ggplot(data=train[train$user_name==&quot;charles&quot;,],aes(seq_along(roll_belt),roll_belt)) + geom_point(aes(colour=train[train$user_name==&quot;charles&quot;,]$classe)) + labs(colour=&quot;Classe&quot;,title=&quot;Roll Belt Measurement for Charles&quot;,y=&quot;Roll Belt Measurement&quot;,x=&quot;Index&quot;)
+
+grid.arrange(gg1, gg2, gg3,ncol=2)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"></p>
+
+<h3>3.4 Partitioning of data</h3>
+
+<p>The dataset will be partitioned into training and testing datasets, with 60% of the original data going to the training set and 40% to the testing set. </p>
+
+<p>The model was built with the training dataset, then tested on the testing dataset. The following code performs this procedure</p>
+
+<pre><code class="r"># partition training dataset into 60/40 training and test
+train_part = createDataPartition(train_used$classe, p = 0.6, list = FALSE)
+training = train_used[train_part, ]
+testing = train_used[-train_part, ]
+</code></pre>
+
+<h2>4.Selection of the model</h2>
+
+<h3>4.1 Step-1</h3>
+
+<p>In the step-1 we will fit a decision tree to gain some intuition in the structure of the data. While easy to interpret, decision trees are known to be fairly poor predictors and we shall instead fit a random forest (an collection of decision trees).</p>
+
+<p>Below we have fit a decision tree using the caret package. While we are already conducting cross-validation by splitting the training data into a training/validation subsets, the caret package allows us to easily conduct 10-fold cross validation in the model training call.</p>
+
+<pre><code class="r">set.seed(1234)
+control = trainControl(method = &quot;cv&quot;, number = 10)
+modelFit2 = train(classe~., method = &quot;rpart&quot;, data = training, trControl = control)
+modelFit2
+</code></pre>
+
+<pre><code>## CART 
+## 
+## 11776 samples
+##    52 predictor
+##     5 classes: &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 10599, 10598, 10598, 10597, 10598, 10598, ... 
+## Resampling results across tuning parameters:
+## 
+##   cp          Accuracy   Kappa     
+##   0.03785002  0.5107884  0.36102963
+##   0.06090808  0.4280575  0.22903443
+##   0.11473659  0.3223387  0.05794787
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was cp = 0.03785002.
+</code></pre>
+
+<p>Despite a 10-fold cross validation process, the decision tree accurately predicts the training data only 51.6% of the time. While this is better than a purely random selection of the &quot;classe&quot; response, it&#39;s likely that we can find a model that predicts better.</p>
+
+<pre><code class="r">plot(modelFit2$finalModel, uniform = TRUE, main = &quot;Classification Tree&quot;)
+text(modelFit2$finalModel)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+
+<p>The initial node of the fitted decision tree splits on the roll belt feature to predict the E classe. We saw this relationship in our exploratory analysis. Also note that the D classe cannot be found at any of the terminal nodes so the fitted decision tree will never predict a D classe. Hopefully we can find a leaner that can do better than that!</p>
+
+<pre><code class="r">confusionMatrix(testing$classe,predict(modelFit2,newdata=testing))
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 2024   41  163    0    4
+##          B  647  493  378    0    0
+##          C  622   45  701    0    0
+##          D  553  253  480    0    0
+##          E  201  216  371    0  654
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.4935          
+##                  95% CI : (0.4824, 0.5046)
+##     No Information Rate : 0.5158          
+##     P-Value [Acc &gt; NIR] : 1               
+##                                           
+##                   Kappa : 0.3383          
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity            0.5001  0.47042  0.33493       NA  0.99392
+## Specificity            0.9452  0.84922  0.88406   0.8361  0.89037
+## Pos Pred Value         0.9068  0.32477  0.51243       NA  0.45354
+## Neg Pred Value         0.6397  0.91229  0.78512       NA  0.99938
+## Prevalence             0.5158  0.13357  0.26676   0.0000  0.08386
+## Detection Rate         0.2580  0.06283  0.08934   0.0000  0.08335
+## Detection Prevalence   0.2845  0.19347  0.17436   0.1639  0.18379
+## Balanced Accuracy      0.7227  0.65982  0.60949       NA  0.94215
+</code></pre>
+
+<h3>4.2 Random Forest Method selection</h3>
+
+<p>The Random Forest method produces the best results. In addition, principal component analysis was attempted however this greatly reduced the prediction accuracy.</p>
+
+<p>Cross validation is not used, as, according to the creators of the Random Forest algorithm: &quot;In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error.&quot; - Leo Breiman and Adele Cutler</p>
+
+<p>The R code is shown below, as is the confusion matrix. The OOB error rate in the training and the confusion matrix is shown below. For informational purposes a plot of the error rate versus number of trees is also shown.</p>
+
+<pre><code class="r">set.seed(1777)
+training$classe=as.factor(training$classe)
+random_forest=randomForest(classe~.,data=training,ntree=500,importance=TRUE)
+random_forest
+</code></pre>
+
+<pre><code>## 
+## Call:
+##  randomForest(formula = classe ~ ., data = training, ntree = 500,      importance = TRUE) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 7
+## 
+##         OOB estimate of  error rate: 0.62%
+## Confusion matrix:
+##      A    B    C    D    E class.error
+## A 3344    4    0    0    0 0.001194743
+## B   15 2258    6    0    0 0.009214568
+## C    0   10 2039    5    0 0.007302824
+## D    0    0   23 1904    3 0.013471503
+## E    0    0    2    5 2158 0.003233256
+</code></pre>
+
+<h3>4.2.1 Plot Random Forest:Error rate vs No of trees and get the randomforest tree</h3>
+
+<pre><code class="r">plot(random_forest,main=&quot;Random Forest: Error Rate vs Number of Trees&quot;)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9"></p>
+
+<pre><code class="r">#We suppress the tree since it is large output
+
+#getTree(random_forest,1,labelVar=TRUE)
+</code></pre>
+
+<h3>4.2.2 Variable Importance</h3>
+
+<p>It may be of interest to know which variables were most &#39;important&#39; in the building of the model. </p>
+
+<p>This can be seen by plotting the mean decrease in accuracy and the mean decrease in the gini coefficient per variable. </p>
+
+<p>The more the accuracy of the random forest decreases due to the exclusion (or permutation) of a single variable, the more important that variable is deemed to be. </p>
+
+<p>The mean decrease in Gini coefficient is a measure of how each variable contributes to the homogeneity of the nodes and leaves in the resulting random forest. </p>
+
+<p>(from <a href="https://dinsdalelab.sdsu.edu/metag.stats/code/randomforest.html">https://dinsdalelab.sdsu.edu/metag.stats/code/randomforest.html</a>)</p>
+
+<pre><code class="r">impfile=&quot;./importance/imp.df.csv&quot;
+if (!file.exists(&quot;./importance&quot;)) {
+  dir.create(&quot;./importance&quot;)
+}
+imp=importance(random_forest)
+impL=imp[,c(6,7)]
+imp.ma=as.matrix(impL)
+imp.df=data.frame(imp.ma)
+
+write.csv(imp.df, impfile, row.names=TRUE)
+imp.df.csv=read.csv(impfile,header=TRUE)
+
+colnames(imp.df.csv)=c(&quot;Variable&quot;,&quot;MeanDecreaseAccuracy&quot;,&quot;MeanDecreaseGini&quot;)
+imp.sort =  imp.df.csv[order(-imp.df.csv$MeanDecreaseAccuracy),] 
+
+imp.sort = transform(imp.df.csv, 
+  Variable = reorder(Variable, MeanDecreaseAccuracy))
+
+VIP=ggplot(data=imp.sort, aes(x=Variable, y=MeanDecreaseAccuracy)) + 
+  ylab(&quot;Mean Decrease Accuracy&quot;)+xlab(&quot;&quot;)+
+    geom_bar(stat=&quot;identity&quot;,fill=&quot;darkblue&quot;,alpha=.8,width=.75)+ 
+    coord_flip()+theme_few() 
+
+imp.sort.Gini &lt;- transform(imp.df.csv, 
+                      Variable = reorder(Variable, MeanDecreaseGini))
+
+VIP.Gini=ggplot(data=imp.sort.Gini, aes(x=Variable, y=MeanDecreaseGini)) + 
+  ylab(&quot;Mean Decrease Gini&quot;)+xlab(&quot;&quot;)+
+  geom_bar(stat=&quot;identity&quot;,fill=&quot;darkred&quot;,alpha=.8,width=.75)+ 
+  coord_flip()+theme_few() 
+
+VarImpPlot=arrangeGrob(VIP, VIP.Gini,ncol=2)
+grid.draw(VarImpPlot)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-10-1.png" alt="plot of chunk unnamed-chunk-10"></p>
+
+<h3>4.2.3 Model applied to test the data set</h3>
+
+<pre><code class="r">test_predictions = predict(random_forest, newdata=testing)
+confusionMatrix(test_predictions,testing$classe)
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 2231    8    0    0    0
+##          B    1 1509   10    0    2
+##          C    0    1 1358   19    0
+##          D    0    0    0 1263    5
+##          E    0    0    0    4 1435
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.9936          
+##                  95% CI : (0.9916, 0.9953)
+##     No Information Rate : 0.2845          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9919          
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity            0.9996   0.9941   0.9927   0.9821   0.9951
+## Specificity            0.9986   0.9979   0.9969   0.9992   0.9994
+## Pos Pred Value         0.9964   0.9915   0.9855   0.9961   0.9972
+## Neg Pred Value         0.9998   0.9986   0.9985   0.9965   0.9989
+## Prevalence             0.2845   0.1935   0.1744   0.1639   0.1838
+## Detection Rate         0.2843   0.1923   0.1731   0.1610   0.1829
+## Detection Prevalence   0.2854   0.1940   0.1756   0.1616   0.1834
+## Balanced Accuracy      0.9991   0.9960   0.9948   0.9907   0.9973
+</code></pre>
+
+<h3>5 Inferences</h3>
+
+<p>The model was applied to the testing dataset and generated predictions for the class of weightlifting type. Above is the code that was used and the confusion matrix for the testing dataset. The accuracy is very high, at over 99%. The model accurately predicted all of the 20 test subjects.</p>
+
+<h3>6 Writing the test cases</h3>
+
+<pre><code class="r">answers &lt;- factor(predict(random_forest, test), labels = levels(training$classe))
+answers &lt;- as.character(answers)
+answers
+</code></pre>
+
+<pre><code>##  [1] &quot;B&quot; &quot;A&quot; &quot;B&quot; &quot;A&quot; &quot;A&quot; &quot;E&quot; &quot;D&quot; &quot;B&quot; &quot;A&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;B&quot; &quot;A&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot;
+## [18] &quot;B&quot; &quot;B&quot; &quot;B&quot;
+</code></pre>
+
+<pre><code class="r">pml_write_files = function(x) {
+  if (!file.exists(&quot;./answers&quot;)) {
+  dir.create(&quot;./answers&quot;)
+}
+    n = length(x)
+    for (i in 1:n) {
+        filename = paste0(&quot;./answers/problem_id_&quot;, i, &quot;.txt&quot;)
+        write.table(x[i], file = filename, quote = FALSE, row.names = FALSE, 
+            col.names = FALSE)
+    }
+}
+
+pml_write_files(answers)
+</code></pre>
+
+<p>This ends the machine learning prediction exercise</p>
+
+</body>
+
+</html>
